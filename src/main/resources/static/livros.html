@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Gerenciamento de Livros</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="index.html">Biblioteca</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu"
+                aria-controls="navbarMenu" aria-expanded="false" aria-label="Alternar navegação">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarMenu">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item"><a class="nav-link active" href="livros.html">Livros</a></li>
+                <li class="nav-item"><a class="nav-link" href="assuntos.html">Assuntos</a></li>
+                <li class="nav-item"><a class="nav-link" href="autores.html">Autores</a></li>
+                <li class="nav-item"><a class="nav-link" href="relatorio.html">Relatório</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container mt-4">
+    <h1 class="mb-4">Livros</h1>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Lista de Livros</div>
+            <div class="card-body">
+                <button class="btn btn-primary mb-3" onclick="listarLivros()">Carregar Livros</button>
+                <ul id="listaLivros" class="list-group"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Cadastrar Livro</div>
+            <div class="card-body">
+                <form id="formCadastrarLivro" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Título</label>
+                        <input type="text" name="titulo" maxlength="40" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Editora</label>
+                        <input type="text" name="editora" maxlength="40" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Edição</label>
+                        <input type="number" name="edicao" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Ano Publicação</label>
+                        <input type="text" name="anoPublicacao" pattern="\d{4}" maxlength="4" inputmode="numeric" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Valor</label>
+                        <input type="text" name="valor" id="campoValor" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Autores IDs (separados por vírgula)</label>
+                        <input type="text" name="autoresIds" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Assuntos IDs (separados por vírgula)</label>
+                        <input type="text" name="assuntosIds" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-success">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Buscar Livro por ID</div>
+            <div class="card-body">
+                <form id="formBuscarLivro" class="row g-3">
+                    <div class="col-md-4">
+                        <input type="number" name="id" class="form-control" required placeholder="ID do Livro" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-info">Buscar</button>
+                    </div>
+                </form>
+                <div id="detalhesLivro" class="mt-4"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Buscar Livro por Título</div>
+            <div class="card-body">
+                <form id="formBuscarLivroPorTitulo" class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" name="titulo" class="form-control" required placeholder="Digite o título ou parte dele" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-info">Buscar</button>
+                    </div>
+                </form>
+                <ul id="resultadoBuscaTitulo" class="list-group mt-4"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Buscar Livros por Autor ou Assunto</div>
+            <div class="card-body">
+                <form id="formBuscarLivroPorAutorOuAssunto" class="row g-3">
+                    <div class="col-md-4">
+                        <input type="number" name="id" inputmode="numeric" class="form-control" required placeholder="ID do Autor ou Assunto" />
+                    </div>
+                    <div class="col-md-4">
+                        <select name="tipo" class="form-select" required>
+                            <option value="" disabled selected>Escolha o tipo</option>
+                            <option value="autor">Autor</option>
+                            <option value="assunto">Assunto</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-info">Buscar</button>
+                    </div>
+                </form>
+                <ul id="resultadoBuscaTipo" class="list-group mt-4"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Buscar Livros por Faixa de Preço</div>
+            <div class="card-body">
+                <form id="formBuscarPorPreco" class="row g-3">
+                    <div class="col-md-4">
+                        <input type="text" name="valorMin" id="valorMin" class="form-control" required placeholder="Valor mínimo" >
+                    </div>
+                    <div class="col-md-4">
+                        <input type="text" name="valorMax" id="valorMax" class="form-control" required placeholder="Valor máximo" />
+                    </div>
+                    <div class="col-md-4">
+                        <button type="submit" class="btn btn-info">Buscar</button>
+                    </div>
+                </form>
+                <ul id="resultadoBuscaPreco" class="list-group mt-4"></ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="mb-5">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">Editar Livro</div>
+            <div class="card-body">
+                <form id="formEditarLivro" class="row g-3">
+                    <div class="col-md-3">
+                        <label class="form-label">ID do Livro</label>
+                        <input type="number" name="id" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Título</label>
+                        <input type="text" name="titulo" maxlength="40" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Editora</label>
+                        <input type="text" name="editora" maxlength="40" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Edição</label>
+                        <input type="number" name="edicao" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Ano Publicação</label>
+                        <input type="text" name="anoPublicacao" pattern="\d{4}" maxlength="4" inputmode="numeric" class="form-control" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Valor</label>
+                        <input type="text" name="valor" id="valorEdit" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Autores IDs (separados por vírgula)</label>
+                        <input type="text" name="autoresIds" class="form-control" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Assuntos IDs (separados por vírgula)</label>
+                        <input type="text" name="assuntosIds" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-warning">Editar Livro</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="modalPromptAutores" tabindex="-1" aria-labelledby="modalPrompt" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="autor-text" class="col-form-label">Digite os novos IDs dos autores separados por vírgula:</label>
+                            <input type="text" class="form-control" id="autor-text">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="salvarAutores">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalPromptAssuntos" tabindex="-1" aria-labelledby="modalPrompt" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="assunto-text" class="col-form-label">Digite os novos IDs dos assuntos separados por vírgula:</label>
+                            <input type="text" class="form-control" id="assunto-text">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="salvarAssunto">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+
+<script src="js/livros.js"></script>
+</body>
+</html>
