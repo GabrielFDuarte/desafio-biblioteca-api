@@ -77,3 +77,33 @@ A aplicação também pode ser acessada pelo navegador:
     - Senha: ```spassu```
 
 
+
+## Documentação
+
+A aplicação foi desenvolvida e documentada com apoio do **Swagger**. 
+
+Para mais informações sobre os endpoints é possível acessar o seguinte endereço com a aplicação sendo executada:
+
+```bash
+http://localhost:8080/swagger-ui/index.html
+```
+
+Outros documentos relevantes incluem os **scripts** utilizados na base de dados **H2** e a collection de endpoints que pode ser importada via **Postman** para testes da API.
+
+Os scripts da base de dados **H2** podem ser encontrados na pasta ```src/main/resources/db.migration``` e são os seguintes:
+- V1__init.sql: Cria as tabelas iniciais de acordo com o modelo de dados;
+- V2__insert_livros_autores_assuntos.sql: Insere dados nas tabelas para facilitar os testes;
+- V3__criar_view_livros_autores_assuntos.sql: Cria a view responsável por buscar os dados do relatório;
+
+Sobre a collection exportada do **Postman**, ela pode ser encontrada na pasta ```postman``` e possui as requisições organizadas de livros, autores, assuntos e relatório como descrito anteriormente na seção Funcionalidades Disponíveis. 
+
+Testes podem ser feitos para todos os endpoints com o uso da collection.
+
+
+
+## Observações
+
+- O banco H2 é carregado em memória e reiniciado a cada start da aplicação.
+- Os dados iniciais são inseridos automaticamente via scripts do Flyway.
+- A aplicação possui testes unitários feitos com JUnit 5 e Mockito.
+- A aplicação pode ser adaptada para uso com banco de dados persistente como PostgreSQL com poucos ajustes.
